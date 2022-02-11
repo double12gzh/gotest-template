@@ -1,15 +1,23 @@
+(@[TOC])
+---
+
 # gotest-template
 
 templates for [gotests](https://github.com/cweill/gotests)
 
 # Usage
 
-## 1. clone this repo
+## 1. install gotests
+```bash
+go get -u github.com/cweill/gotests/...
+```
+
+## 2. clone this repo
 
 ```bash
 git clone https://github.com/double12gzh/gotest-template.git
 ```
-## 2. enjoy
+## 3. enjoy
 
 let's prepapre a go program
 
@@ -63,7 +71,7 @@ func bar(car Car) Experience {
 }
 
 ```
-### example1
+### 3.1 example1
 ```bash
  gotests -template_dir /root/gotest-template/templates  -only "^bar$" ./exmaple.go
 ```
@@ -74,9 +82,52 @@ package examples
 import (
         "testing"
 
-        "gopkg.in/go-playground/assert.v1"
+        . "github.com/agiledragon/gomonkey"
+        . "github.com/smartystreets/goconvey/convey"
 )
 
+func TestFoo_bar(t *testing.T) {
+        type args struct {
+                x string
+        }
+
+        tests := []struct {
+                name        string
+                f           *Foo
+                args        args
+                want        Student
+                extraCheck  func()
+                mockSQLFUNC func()
+                patchesFunc func() *Patches
+        }{
+                // TODO: Add test cases.
+        }
+
+        Convey("start", t, func() {
+                Convey("case", func() {
+                        for _, ttt := range tests {
+                                tt := ttt
+                                f := func() {
+
+                                        patches := tt.patchesFunc()
+                                        defer patches.Reset()
+
+                                        tt.mockSQLFUNC()
+
+                                        f := &Foo{}
+                                        got := f.bar(tt.args.x)
+                                        So(got, ShouldResemble, tt.want)
+
+                                        tt.extraCheck()
+                                }
+
+                                f()
+
+                        }
+
+                })
+        })
+}
 
 func Test_bar(t *testing.T) {
         type args struct {
@@ -118,9 +169,10 @@ func Test_bar(t *testing.T) {
                 })
         })
 }
+
 ```
 
-## example2 
+### 3.2 example2 
 
 ```golang
 ➜  abb gotests -template_dir /root/gotests-template/templates -only ^Bar$ examples/e.go
@@ -178,13 +230,13 @@ func TestFoo_Bar(t *testing.T) {
 
 ```
 
-### example3
+### 3.3 example3
 
 ```bash
 gotests -template_dir /root/gotests-template/templates -only ^Bar$ -exported examples/e.go
 ```
 
-### example4 
+### 3.4 example4 
 
 ```bash
 gotests -template_dir /root/gotests-template/templates -only ^bar$ examples/e.go
