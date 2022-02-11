@@ -16,36 +16,9 @@ let's prepapre a go program
 ```golang
 package examples
 
-import (
-        "testing"
+import "fmt"
 
-        "gopkg.in/go-playground/assert.v1"
-)
-
-func TestFoo_Bar(t *testing.T) {
-        type args struct {
-                x int
-        }
-        tests := []struct {
-                name  string
-                f     *Foo
-                args  args
-                want  string
-                setup func(args args, want string)
-        }{
-                // TODO: Add test cases.
-        }
-        for _, tt := range tests {
-                t.Run(tt.name, func(t *testing.T) {
-                        f := &Foo{}
-                        if tt.setup != nil {
-                                tt.setup(tt.args, tt.want)
-                        }
-                        assert.Equal(t, tt.want, f.Bar(tt.args.x))
-
-                })
-        }
-
+type Student struct {
         Name string
         Age  int
 }
@@ -150,14 +123,14 @@ func Test_bar(t *testing.T) {
 ## example2 
 
 ```golang
-➜  abb gotests -template_dir /root/gotests-template/templates  -only ^Bar$ examples/e.go
-Generated TestFoo_Bar
+➜  abb gotests -template_dir /root/gotests-template/templates -only ^Bar$ examples/e.go
 package examples
 
 import (
         "testing"
 
-        "gopkg.in/go-playground/assert.v1"
+        . "github.com/agiledragon/gomonkey"
+        . "github.com/smartystreets/goconvey/convey"
 )
 
 func TestFoo_Bar(t *testing.T) {
@@ -202,4 +175,18 @@ func TestFoo_Bar(t *testing.T) {
                 })
         })
 }
+
+```
+
+### example3
+
+```bash
+gotests -template_dir /root/gotests-template/templates -only ^Bar$ -exported examples/e.go
+```
+
+### example4 
+
+```bash
+gotests -template_dir /root/gotests-template/templates -only ^bar$ examples/e.go
+
 ```
