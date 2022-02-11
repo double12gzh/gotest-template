@@ -1,0 +1,13 @@
+{{define "header"}}
+{{range .Comments}}{{.}}
+{{end -}}
+package {{.Package}}
+
+import (
+{{range .Imports}}{{.Name}} {{.Path}}
+{{end}}
+
+. "github.com/agiledragon/gomonkey"
+. "github.com/smartystreets/goconvey/convey"
+)
+{{end}}

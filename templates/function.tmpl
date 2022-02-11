@@ -1,0 +1,116 @@
+{{define "function"}}
+{{- $f := .}}
+
+func {{.TestName}}(t *testing.T) {
+    {{- with .Receiver}}
+        {{- if .IsStruct}}
+            {{- if .Fields}}
+                type fields struct {
+                    {{- range .Fields}}
+                        {{Field .}} {{.Type}}
+                    {{- end}}
+                }
+            {{- end}}
+        {{- end}}
+    {{- end}}
+    {{- if .TestParameters}}
+        type args struct {
+            {{- range .TestParameters}}
+                {{Param .}} {{.Type}}
+            {{- end}}
+        }
+    {{- end}}
+
+    tests := []struct {
+        name string
+        {{- with .Receiver}}
+            {{- if and .IsStruct .Fields}}
+                fields fields
+            {{- else}}
+                {{Receiver .}} {{.Type}}
+            {{- end}}
+        {{- end}}
+        {{- if .TestParameters}}
+            args args
+        {{- end}}
+        {{- range .TestResults}}
+            {{Want .}} {{.Type}}
+        {{- end}}
+        {{- if .ReturnsError}}
+            wantErr bool
+        {{- end}}
+        {{- /* 额外的检查 */}}
+        extraCheck  func()
+        {{- /* 数据库 mock */}}
+        mockSQLFUNC func()
+        {{- /* 函数打桩 */}}
+        patchesFunc func() *Patches
+        }{
+            // TODO: Add test cases.
+        }
+
+    Convey("start", t, func(){
+        Convey("case", func() {
+            for {{if (or .Subtests (not .IsNaked))}} _, ttt := {{end}} range tests {
+                tt := ttt
+                f := func() {
+                {{/* 函数打桩 */}}
+                patches := tt.patchesFunc()
+                defer patches.Reset()
+                {{/* 数据函数 mock */}}
+                tt.mockSQLFUNC()
+
+                {{/* 判断逻辑 */}}
+                {{- with .Receiver}}
+                    {{- if .IsStruct}}
+                        {{Receiver .}} := {{if .Type.IsStar}}&{{end}}{{.Type.Value}}{
+                            {{- range .Fields}}
+                                {{.Name}}: tt.fields.{{Field .}},
+                            {{- end}}
+                        }
+                    {{- end}}
+                {{- end}}
+                {{- range .Parameters}}
+                    {{- if .IsWriter}}
+                        {{Param .}} := &bytes.Buffer{}
+                    {{- end}}
+                {{- end}}
+                {{- if and (not .OnlyReturnsError) (not .OnlyReturnsOneValue) }}
+                    {{template "results" $f}} {{template "call" $f}}
+                {{- end}}
+                {{- if .ReturnsError}}
+                    {{if .OnlyReturnsError}} err := {{template "call" $f}} {{end}}
+                    if err != nil {
+                        So(tt.wantErr, ShouldBeTrue)
+                    } else {
+                        So(tt.wantErr, ShouldBeFalse)
+                    }
+                {{- end}}
+                {{- range .TestResults}}
+                    {{- if .IsWriter}}
+                        {{Got .}} := {{Param .}}.String()
+                        So({{Got .}}, ShouldEqual)
+                    {{- else if .IsBasicType}}
+                        {{if $f.OnlyReturnsOneValue}}{{Got .}} := {{template "inline" $f}} {{end}}
+                        So({{Got .}}, ShouldEqual, tt.{{Want .}})
+                    {{- else}}
+                        {{if $f.OnlyReturnsOneValue}}{{Got .}} := {{template "inline" $f}} {{end}}
+                        So({{Got .}}, ShouldResemble, tt.{{Want .}})
+                    {{- end}}
+                {{- end}}
+
+                    {{/* 额外的检查 */}}
+                    tt.extraCheck()
+                }
+
+                {{/* 执行检查 */}}
+                f()
+
+            }
+
+            })
+    })
+}
+
+{{end}}
+
