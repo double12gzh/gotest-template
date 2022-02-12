@@ -80,6 +80,7 @@ func {{.TestName}}(t *testing.T) {
                 {{- end}}
                 {{- if .ReturnsError}}
                     {{if .OnlyReturnsError}} err := {{template "call" $f}} {{end}}
+                    {{/* */}}
                     if err != nil {
                         So(tt.wantErr, ShouldBeTrue)
                     } else {
@@ -89,12 +90,18 @@ func {{.TestName}}(t *testing.T) {
                 {{- range .TestResults}}
                     {{- if .IsWriter}}
                         {{Got .}} := {{Param .}}.String()
+
+                        {{/* */}}
                         So({{Got .}}, ShouldEqual)
                     {{- else if .IsBasicType}}
                         {{if $f.OnlyReturnsOneValue}}{{Got .}} := {{template "inline" $f}} {{end}}
+
+                        {{/* */}}
                         So({{Got .}}, ShouldEqual, tt.{{Want .}})
                     {{- else}}
                         {{if $f.OnlyReturnsOneValue}}{{Got .}} := {{template "inline" $f}} {{end}}
+
+                        {{/* */}}
                         So({{Got .}}, ShouldResemble, tt.{{Want .}})
                     {{- end}}
                 {{- end}}
