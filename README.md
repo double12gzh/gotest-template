@@ -3,7 +3,7 @@
 
 # gotest-template
 
-templates for [gotests](https://github.com/cweill/gotests)
+Auto generate test for golang code. Templates for [gotests](https://github.com/cweill/gotests)
 
 # Usage
 
@@ -72,10 +72,12 @@ func bar(car Car) Experience {
 
 ```
 ### 3.1 example1
+Generate test case with the given test templates `/root/gotest-template/templates`
 ```bash
  gotests -template_dir /root/gotest-template/templates  -only "^bar$" ./exmaple.go
 ```
 
+Generated test cases
 ```golang
 package examples
 
@@ -173,9 +175,14 @@ func Test_bar(t *testing.T) {
 ```
 
 ### 3.2 example2 
+Generate test case for method/function (case in-sensitive)
 
+```bash
+gotests -template_dir /root/gotests-template/templates -only ^Bar$ examples/e.go
+```
+
+Generated test cases
 ```golang
-➜  abb gotests -template_dir /root/gotests-template/templates -only ^Bar$ examples/e.go
 package examples
 
 import (
@@ -231,6 +238,7 @@ func TestFoo_Bar(t *testing.T) {
 ```
 
 ### 3.3 example3
+Only generate test case for exported method/function
 
 ```bash
 gotests -template_dir /root/gotests-template/templates -only ^Bar$ -exported examples/e.go
@@ -240,5 +248,4 @@ gotests -template_dir /root/gotests-template/templates -only ^Bar$ -exported exa
 
 ```bash
 gotests -template_dir /root/gotests-template/templates -only ^bar$ examples/e.go
-
 ```
