@@ -1,23 +1,32 @@
-(@[TOC])
+- [gotest-template](#gotest-template)
+  * [Usage](#usage)
+    + [1. install gotests](#1-install-gotests)
+    + [2. clone this repo](#2-clone-this-repo)
+    + [3. enjoy](#3-enjoy)
+      - [3.1 example1](#31-example1)
+      - [3.2 example2](#32-example2)
+      - [3.3 example3](#33-example3)
+      - [3.4 example4](#34-example4)
+
 ---
 
 # gotest-template
 
 Auto generate test for golang code. Templates for [gotests](https://github.com/cweill/gotests)
 
-# Usage
+## Usage
 
-## 1. install gotests
+### 1. install gotests
 ```bash
 go get -u github.com/cweill/gotests/...
 ```
 
-## 2. clone this repo
+### 2. clone this repo
 
 ```bash
 git clone https://github.com/double12gzh/gotest-template.git
 ```
-## 3. enjoy
+### 3. enjoy
 
 let's prepapre a go program
 
@@ -71,7 +80,7 @@ func bar(car Car) Experience {
 }
 
 ```
-### 3.1 example1
+#### 3.1 example1
 Generate test case with the given test templates `/root/gotest-template/templates`
 ```bash
  gotests -template_dir /root/gotest-template/templates  -only "^bar$" ./exmaple.go
@@ -174,7 +183,7 @@ func Test_bar(t *testing.T) {
 
 ```
 
-### 3.2 example2 
+#### 3.2 example2 
 Generate test case for method/function (case in-sensitive)
 
 ```bash
@@ -237,14 +246,14 @@ func TestFoo_Bar(t *testing.T) {
 
 ```
 
-### 3.3 example3
+#### 3.3 example3
 Only generate test case for exported method/function
 
 ```bash
 gotests -template_dir /root/gotests-template/templates -only ^Bar$ -exported examples/e.go
 ```
 
-### 3.4 example4 
+#### 3.4 example4 
 
 ```bash
 gotests -template_dir /root/gotests-template/templates -only ^bar$ examples/e.go
