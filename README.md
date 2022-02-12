@@ -1,16 +1,12 @@
-- [gotest-template](#gotest-template)
-  * [Usage](#usage)
-    + [1. install gotests](#1-install-gotests)
-    + [2. clone this repo](#2-clone-this-repo)
-    + [3. enjoy](#3-enjoy)
-      - [3.1 example1](#31-example1)
-      - [3.2 example2](#32-example2)
-      - [3.3 example3](#33-example3)
-      - [3.4 example4](#34-example4)
-
+- [Usage](#usage)
+  * [1. install gotests](#1-install-gotests)
+  * [2. clone this repo](#2-clone-this-repo)
+  * [3. enjoy](#3-enjoy)
+    + [3.1 example1](#31-example1)
+    + [3.2 example2](#32-example2)
+    + [3.3 example3](#33-example3)
+    + [3.4 example4](#34-example4)
 ---
-
-# gotest-template
 
 Auto generate test for golang code. Templates for [gotests](https://github.com/cweill/gotests)
 
