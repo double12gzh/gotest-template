@@ -42,7 +42,7 @@ func {{.TestName}}(t *testing.T) {
         {{- /* 额外的检查 */}}
         extraCheck  func()
         {{- /* 数据库 mock */}}
-        mockSQLFUNC func()
+        mockSQLFunc func()
         {{- /* 函数打桩 */}}
         patchesFunc func() *Patches
         }{
@@ -58,7 +58,7 @@ func {{.TestName}}(t *testing.T) {
                 patches := tt.patchesFunc()
                 defer patches.Reset()
                 {{/* 数据函数 mock */}}
-                tt.mockSQLFUNC()
+                tt.mockSQLFunc()
 
                 {{/* 判断逻辑 */}}
                 {{- with .Receiver}}
